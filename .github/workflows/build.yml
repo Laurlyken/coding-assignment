@@ -1,0 +1,43 @@
+name: Run Text File Scanner
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      directory:
+        description: 'Directory to scan'
+        required: true
+        default: './test_directory'
+      regex:
+        description: 'Regular expression to match'
+        required: true
+        default: 'example.*pattern'
+
+jobs:
+  scan-files:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Create test directory and files
+      run: |
+        mkdir -p ${{ github.event.inputs.directory || './test_directory' }}
+        echo "This is an example file" > ${{ github.event.inputs.directory || './test_directory' }}/file1.txt
+        echo "This file contains a pattern to match" > ${{ github.event.inputs.directory || './test_directory' }}/file2.txt
+
+    - name: Run scanner script
+      run: python script.py ${{ github.event.inputs.directory || './test_directory' }} "${{ github.event.inputs.regex || 'example.*pattern' }}"
+
+    - name: Upload results
+      uses: actions/upload-artifact@v2
+      with:
+        name: scan-results
+        path: scan_results.txt
