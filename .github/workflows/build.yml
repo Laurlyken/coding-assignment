@@ -34,7 +34,14 @@ jobs:
         echo "This file contains a pattern to match" > ${{ github.event.inputs.directory || './test_directory' }}/file2.txt
 
     - name: Run scanner script
-      run: |
-        echo "Scan Results:"
-        echo "=============="
-        python script.py ${{ github.event.inputs.directory || './test_directory' }} "${{ github.event.inputs.regex || 'example.*pattern' }}"
+          run: |
+            echo "Scan Results:"
+            echo "=============="
+            echo "Directory contents:"
+            ls -R ${{ github.event.inputs.directory || './test_directory' }}
+            echo "=============="
+            echo "Running script:"
+            python -V
+            python script.py ${{ github.event.inputs.directory || './test_directory' }} "${{ github.event.inputs.regex || 'example.*pattern' }}"
+            echo "=============="
+            echo "Script execution completed"
