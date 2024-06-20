@@ -34,10 +34,7 @@ jobs:
         echo "This file contains a pattern to match" > ${{ github.event.inputs.directory || './test_directory' }}/file2.txt
 
     - name: Run scanner script
-      run: python script.py ${{ github.event.inputs.directory || './test_directory' }} "${{ github.event.inputs.regex || 'example.*pattern' }}"
-
-    - name: Upload results
-      uses: actions/upload-artifact@v2
-      with:
-        name: scan-results
-        path: scan_results.txt
+      run: |
+        echo "Scan Results:"
+        echo "=============="
+        python script.py ${{ github.event.inputs.directory || './test_directory' }} "${{ github.event.inputs.regex || 'example.*pattern' }}"
